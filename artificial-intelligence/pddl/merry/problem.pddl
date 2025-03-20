@@ -1,0 +1,93 @@
+(define (problem merry1)
+    (:domain merry)
+    (:objects
+        a b c d e f g h i - room
+        ga pb yc bc gd rd be ge bf b2f gh rh yi bi - scolor
+        niebieski czerwony zielony pomaranczowy rozowy - color
+        c1 c2 c3 - cord
+        n1 n2 n3 n4 n5 n6 n7 n8 - block
+    )
+
+    (:init
+        (iscolor a ga)
+        (tocolor zielony ga)
+        (iscolor b pb)
+        (tocolor rozowy pb)
+        (iscolor c yc)
+        (tocolor pomaranczowy yc)
+        (iscolor c bc)
+        (tocolor niebieski bc)
+        (iscolor d gd)
+        (tocolor zielony gd)
+        (iscolor d rd)
+        (tocolor czerwony rd)
+        (iscolor e be)
+        (tocolor niebieski be)
+        (iscolor e ge)
+        (tocolor zielony ge)
+        (iscolor f bf)
+        (tocolor niebieski bf)
+        (iscolor f b2f)
+        (tocolor niebieski b2f)
+        (iscolor h gh)
+        (tocolor zielony gh)
+        (iscolor h rh)
+        (tocolor czerwony rh)
+        (iscolor i yi)
+        (tocolor pomaranczowy yi)
+        (iscolor i bi)
+        (tocolor niebieski bi)
+
+        (from a b pomaranczowy)
+        (from a c czerwony)
+        (from c a czerwony)
+        (from c e zielony)
+        (from e c zielony)
+        (from b d pomaranczowy)
+        (from d f zielony)
+        (from f d zielony)
+        (from e f niebieski)
+        (from f e niebieski)
+        (from e h czerwony)
+        (from h e czerwony)
+        (from h i niebieski)
+        (from i h niebieski)
+        (from i f niebieski)
+        (from f i niebieski)
+        (from f g rozowy)
+
+        (position f)
+
+        (avaliablepuzzle a)
+
+        (value c1 c1 n5)
+        (value c2 c1 n4)
+        (value c3 c1 n1)
+        (value c1 c2 n8)
+        (value c2 c2 FREE)
+        (value c3 c2 n3)
+        (value c1 c3 n7)
+        (value c2 c3 n2)
+        (value c3 c3 n6)
+
+        (next c1 c2)
+        (next c2 c3)
+        (next c3 c2)
+        (next c2 c1)
+    )
+
+    (:goal
+        (and
+            (position g)
+            (value c1 c1 n1)
+            (value c2 c1 n2)
+            (value c3 c1 n3)
+            (value c1 c2 n4)
+            (value c2 c2 n5)
+            (value c3 c2 n6)
+            (value c1 c3 n7)
+            (value c2 c3 n8)
+        )
+    )
+
+)

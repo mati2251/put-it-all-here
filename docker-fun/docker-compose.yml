@@ -1,0 +1,35 @@
+version: 2.19.0
+services: 
+    dns-server:
+        build: dns-server/.
+        hostname: dns
+        dns: 
+            - 10.1.0.2
+        networks: 
+            webnet:
+                ipv4_address: 10.1.0.2
+    www-server:
+        image: httpd
+        dns:
+            - 10.1.0.2
+        volumes:
+            - type: bind
+              source: ./www-server
+              target: /usr/local/apache2/htdocs/
+        networks:
+            webnet:
+                ipv4_address: 10.1.0.3
+    client: 
+        build: client/.
+        tty: true
+        hostname: client
+        dns: 
+            - 10.1.0.2
+        networks: 
+            - webnet    
+networks:
+    webnet:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.1.0.0/24

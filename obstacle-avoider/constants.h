@@ -1,0 +1,12 @@
+#define DIRECTION_RIGHT 12
+#define BRAKE_RIGHT 9
+#define SPEED_RIGHT 3
+#define DIRECTION_LEFT 13
+#define BRAKE_LEFT 8
+#define SPEED_LEFT 11
+#define TRIG 7
+#define ECHO 6
+#define TRIG_RIGHT 4
+#define ECHO_RIGHT 5
+#define TRIG_LEFT 2
+#define ECHO_LEFT 10

@@ -1,0 +1,11 @@
+<PRE>
+<I>/*
+* Prosty program
+*/ </I>
+<B>#include "stdafx.h"</B>
+<FONT size=3> int main(int argc, char* argv[]) <br>
+{ <br>
+printf("Hello World!\n"); <PRE>// Wyświetlenie ciągu znaków </PRE><br>
+return 0; <br>
+}</FONT>
+</pre>

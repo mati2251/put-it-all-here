@@ -1,0 +1,4 @@
+Imie      Nazwisko     Zarobek
+Adam      Nowak        458.50
+Michalina Nowak        501.50
+Szymon    Kowalski     440.00

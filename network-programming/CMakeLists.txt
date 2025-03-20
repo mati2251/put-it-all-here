@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.25)
+project(network-programming)
+
+set(CMAKE_CXX_STANDARD 20)
+
+add_executable(client base/client/main.cpp)
+add_executable(server-tcp base/server-tcp/main.cpp)
+add_executable(server-udp base/server-udp/main.cpp)
+add_executable(client-udp base/client-udp/main.cpp)
+add_executable(translate-dns-old dns-translate/translate-dns-old/main.cpp)
+add_executable(client-tcp-dns dns-translate/client-tcp-dns/main.cpp)
+add_executable(non-blocking-server-tcp non-blocking-server/main.cpp)
+add_executable(multi-thread-client multi/therads/multi-thread-client/main.cpp)
+add_executable(multi-thread-server multi/therads/multi-thread-server/main.cpp)
+add_executable(poll-client multi/poll-client/main.cpp)
+add_executable(epoll-client multi/epoll-client/main.cpp)

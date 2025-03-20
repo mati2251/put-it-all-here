@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formularz Budynku</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h3, h4 {
+            color: #333;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 95%;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #004494;
+        }
+
+        .collapsible {
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #ccc;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <form id="buildingForm" action="/submit-data" method="post">
+        <div class="building" id="building1">
+            <button type="button" class="collapsible">Budynek</button>
+            <div class="content">
+                Nazwa: <input type="text" name="buildingName"><br>
+                ID: <input type="number" name="buildingId"><br>
+                Typ: <input type="text" name="buildingType" value="BUILDING" readonly><br>
+
+                <div class="floorsContainer" id="floorsContainer1">
+                    <div class="floor" id="floor1">
+
+                        <button type="button" class="collapsible">Pietro</button>
+                        <div class="content">
+                            Nazwa: <input type="text" name="floorName"><br>
+                            ID: <input type="number" name="floorId"><br>
+                            Typ: <input type="text" name="floorType" value="FLOOR" readonly><br>
+
+                            <div class="roomsContainer" id="roomsContainer1">
+                                <div class="room" id="room1">
+                                    <button type="button" class="collapsible">Sala1</button>
+                                    <div class="content">
+                                        Nazwa: <input type="text" name="roomName"><br>
+                                        ID: <input type="number" name="roomId"><br>
+                                        Typ: <input type="text" name="roomType" value="ROOM" readonly><br>
+                                        Powierzchnia: <input type="number" name="roomArea"><br>
+                                        Kubatura: <input type="number" name="roomCube"><br>
+                                        Ogrzewanie: <input type="number" name="roomHeating"><br>
+                                        Oświetlenie: <input type="number" name="roomLighting"><br>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class='area' onclick="customGet(event)">Area</button>
+                            <button type="button" class='cube' onclick="customGet(event)">Cube</button>
+                            <button type="button" class='heating-per-cube-meter' onclick="customGet(event)">Heating per cube meter</button>
+                            <button type="button" class='heating-consumption' onclick="customGet(event)">Heating consumption</button>
+                            <button type="button" class='lighting-power' onclick="customGet(event)">Lightning power</button>
+
+                            <button type="button" onclick="addRoom(1, 1)">Dodaj Pokój</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class='area' onclick="customGet(event)">Area</button>
+                <button type="button" class='cube' onclick="customGet(event)">Cube</button>
+                <button type="button" class='heating-per-cube-meter' onclick="customGet(event)">Heating per cube meter</button>
+                <button type="button" class='heating-consumption' onclick="customGet(event)">Heating consumption</button>
+                <button type="button" class='lighting-power' onclick="customGet(event)">Lightning power</button>
+                <button type="button" id="addFloorBtn" onclick="addFloor(1)">Dodaj Piętro</button>
+            </div>
+            <div id="result"></div>
+        </div>
+            <button type="button" id="addBuildingBtn">Dodaj Budynek</button>
+    </form>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setupCollapsibles();
+            document.getElementById('addBuildingBtn').addEventListener('click', addBuilding);
+        });
+
+        function customGet(event){
+            parentElement = event.target.parentElement.parentElement;
+            url = event.target.classList[0];
+            customFetch(parentElement, url);
+        };
+
+        function customFetch(parentElement, url) {
+            jsonData = submitForm(parentElement);
+            console.log(JSON.stringify(jsonData));
+            fetch(url, {
+                method: 'POST',
+                mode:'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept"
+                },
+                body: JSON.stringify(jsonData)
+                })
+            .then(response => {
+            if (!response.ok) {
+                console.log(response)
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+            })
+            .then(data => {
+                document.getElementById('result').innerHTML = 'Wynik: ' + data;
+            })
+            .catch((error) => {
+                console.error('Błąd:', error);
+            });
+        }
+
+        function toggleCollapsible() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+        function setupCollapsibles() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].removeEventListener("click", toggleCollapsible); // Remove existing listener to avoid duplicates
+                coll[i].addEventListener("click", toggleCollapsible);
+            }
+        }
+        function submitForm(element) {
+            if (element.className == "building") {
+                var building = {
+                    name: element.querySelector('input[name="buildingName"]').value,
+                    id: parseInt(element.querySelector('input[name="buildingId"]').value),
+                    type: element.querySelector('input[name="buildingType"]').value,
+                    locations: []
+                };
+
+                var floorElements = element.querySelectorAll('.floor');
+                floorElements.forEach(function(floorEl) {
+                    var floor = {
+                        name: floorEl.querySelector('input[name="floorName"]').value,
+                        id: parseInt(floorEl.querySelector('input[name="floorId"]').value),
+                        type: floorEl.querySelector('input[name="floorType"]').value,
+                        locations: []
+                    };
+
+                    var roomElements = floorEl.querySelectorAll('.room');
+                    roomElements.forEach(function(roomEl) {
+                        var room = {
+                            name: roomEl.querySelector('input[name="roomName"]').value,
+                            id: parseInt(roomEl.querySelector('input[name="roomId"]').value),
+                            type: roomEl.querySelector('input[name="roomType"]').value,
+                            area: parseInt(roomEl.querySelector('input[name="roomArea"]').value),
+                            cube: parseInt(roomEl.querySelector('input[name="roomCube"]').value),
+                            heating: parseInt(roomEl.querySelector('input[name="roomHeating"]').value),
+                            lighting: parseInt(roomEl.querySelector('input[name="roomLighting"]').value)
+                        };
+                        floor.locations.push(room);
+                    });
+                    building.locations.push(floor);
+                });
+                return building;
+            } else {
+                var floor = {
+                    name: element.querySelector('input[name="floorName"]').value,
+                    id: parseInt(element.querySelector('input[name="floorId"]').value),
+                    type: element.querySelector('input[name="floorType"]').value,
+                    locations: []
+                };
+
+                var roomElements = element.querySelectorAll('.room');
+                    roomElements.forEach(function(roomEl) {
+                        var room = {
+                            name: roomEl.querySelector('input[name="roomName"]').value,
+                            id: parseInt(roomEl.querySelector('input[name="roomId"]').value),
+                            type: roomEl.querySelector('input[name="roomType"]').value,
+                            area: parseInt(roomEl.querySelector('input[name="roomArea"]').value),
+                            cube: parseInt(roomEl.querySelector('input[name="roomCube"]').value),
+                            heating: parseInt(roomEl.querySelector('input[name="roomHeating"]').value),
+                            lighting: parseInt(roomEl.querySelector('input[name="roomLighting"]').value)
+                        };
+                        floor.locations.push(room);
+                    });
+                };
+                return floor;
+        }
+
+        function addBuilding() {
+            var form = document.getElementById('buildingForm');
+            var buildingNumber = form.getElementsByClassName('building').length + 1;
+            var newBuilding = document.createElement('div');
+            newBuilding.setAttribute('class', 'building');
+            newBuilding.setAttribute('id', 'building' + buildingNumber);
+            newBuilding.innerHTML =
+                '<button type="button" class="collapsible">Budynek' + buildingNumber + '</button>' +
+                '<div class="content">'+
+                    'Nazwa: <input type="text" name="buildingName"><br>' +
+                    'ID: <input type="number" name="buildingId"><br>' +
+                    'Typ: <input type="text" name="buildingType" value="BUILDING" readonly><br>' +
+
+                    '<div class="floorsContainer" id="floorsContainer' + buildingNumber + '">' +
+                        '<div class="floor" id="floor1">' +
+                            '<button type="button" class="collapsible">Pietro1</button>' +
+                            '<div class="content">'+
+                                'Nazwa: <input type="text" name="floorName"><br>' +
+                                'ID: <input type="number" name="floorId"><br>' +
+                                'Typ: <input type="text" name="floorType" value="FLOOR" readonly><br>' +
+
+                                '<div class="roomsContainer" id="roomsContainer' + buildingNumber + '">' +
+                                    '<div class="room" id="room1">' +
+                                        '<button type="button" class="collapsible">Sala1</button>' +
+                                        '<div class="content">'+
+                                            'Nazwa: <input type="text" name="roomName"><br>' +
+                                            'ID: <input type="number" name="roomId"><br>' +
+                                            'Typ: <input type="text" name="roomType" value="ROOM" readonly><br>' +
+                                            'Powierzchnia: <input type="number" name="roomArea"><br>' +
+                                            'Kubatura: <input type="number" name="roomCube"><br>' +
+                                            'Ogrzewanie: <input type="number" name="roomHeating"><br>' +
+                                            'Oświetlenie: <input type="number" name="roomLighting"><br>' +
+                                        '</div>'+
+                                    '</div>' +
+                                '</div>'+
+                                `<button type="button" class='area' onclick="customGet(event)">Area</button>
+                                <button type="button" class='cube' onclick="customGet(event)">Cube</button>
+                                <button type="button" class='heating-per-cube-meter' onclick="customGet(event)">Heating per cube meter</button>
+                                <button type="button" class='heating-consumption' onclick="customGet(event)">Heating consumption</button>
+                                <button type="button" class='lighting-power' onclick="customGet(event)">Lightning power</button>`+
+                                '<button type="button" onclick="addRoom(' + buildingNumber + ',' + buildingNumber + ')">Dodaj Pokój</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'+
+                    '<button type="button" onclick="addFloor(' + buildingNumber + ')">Dodaj Piętro</button>'+
+                '</div>';
+            form.appendChild(newBuilding);
+            setupCollapsibles();
+        }
+
+        function addFloor(buildingNumber) {
+            var floorsContainer = document.getElementById('floorsContainer' + buildingNumber);
+            var floorNumber = floorsContainer.getElementsByClassName('floor').length + 1;
+            var newFloor = document.createElement('div');
+            newFloor.setAttribute('class', 'floor');
+            newFloor.setAttribute('id', 'floor' + floorNumber);
+            newFloor.innerHTML =
+                '<button type="button" class="collapsible">Pietro' + floorNumber + '</button>' +
+                '<div class="content">'+
+                    'Nazwa: <input type="text" name="floorName"><br>' +
+                    'ID: <input type="number" name="floorId"><br>' +
+                    'Typ: <input type="text" name="floorType" value="FLOOR" readonly><br>' +
+
+                    '<div class="roomsContainer" id="roomsContainer' + floorNumber + '">' +
+                        '<div class="room" id="room1">' +
+                            '<button type="button" class="collapsible">Sala1</button>' +
+                            '<div class="content">'+
+                                'Nazwa: <input type="text" name="roomName"><br>' +
+                                'ID: <input type="number" name="roomId"><br>' +
+                                'Typ: <input type="text" name="roomType" value="ROOM" readonly><br>' +
+                                'Powierzchnia: <input type="number" name="roomArea"><br>' +
+                                'Kubatura: <input type="number" name="roomCube"><br>' +
+                                'Ogrzewanie: <input type="number" name="roomHeating"><br>' +
+                                'Oświetlenie: <input type="number" name="roomLighting"><br>' +
+                            '</div>'+
+                        '</div>' +
+                    '</div>' +
+                    `<button type="button" class='area' onclick="customGet(event)">Area</button>
+                    <button type="button" class='cube' onclick="customGet(event)">Cube</button>
+                    <button type="button" class='heating-per-cube-meter' onclick="customGet(event)">Heating per cube meter</button>
+                    <button type="button" class='heating-consumption' onclick="customGet(event)">Heating consumption</button>
+                    <button type="button" class='lighting-power' onclick="customGet(event)">Lightning power</button>`+
+                    '<button type="button" onclick="addRoom(' + buildingNumber +',' + floorNumber + ')">Dodaj Pokój</button>'+
+                '</div>';
+            floorsContainer.appendChild(newFloor);
+            setupCollapsibles();
+        }
+
+        function addRoom(buildingNumber, floorNumber) {
+            var floorsContainer = document.getElementById('floorsContainer' + buildingNumber);
+            var roomsContainer = floorsContainer.querySelector('#roomsContainer' + floorNumber);
+
+            var roomNumber = roomsContainer.getElementsByClassName('room').length + 1;
+            var newRoom = document.createElement('div');
+            newRoom.setAttribute('class', 'room');
+            newRoom.setAttribute('id', 'room' + roomNumber);
+            newRoom.innerHTML =
+                '<button type="button" class="collapsible">Sala' + roomNumber + '</button>' +
+                '<div class="content">'+
+                    'Nazwa: <input type="text" name="roomName"><br>' +
+                    'ID: <input type="number" name="roomId"><br>' +
+                    'Typ: <input type="text" name="roomType" value="ROOM" readonly><br>' +
+                    'Powierzchnia: <input type="number" name="roomArea"><br>' +
+                    'Kubatura: <input type="number" name="roomCube"><br>' +
+                    'Ogrzewanie: <input type="number" name="roomHeating"><br>' +
+                    'Oświetlenie: <input type="number" name="roomLighting"><br>'+
+                '</div>';
+            roomsContainer.appendChild(newRoom);
+            setupCollapsibles();
+        }
+
+    </script>
+</body>
+</html>

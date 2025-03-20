@@ -1,0 +1,4 @@
+jeden  2  !!!
+; on on on on on on on on
+;on on on on on on on on
+four ;; six

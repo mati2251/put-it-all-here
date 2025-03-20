@@ -1,0 +1,21 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata: 
+    name: www-deployment
+    labels:
+        app: www
+spec: 
+    replicas: 3
+    selector:
+        matchLabels:
+            app: www
+    template:
+        metadata:
+            labels:
+                app: www
+        spec:
+            containers:
+                - name: web
+                  image: yeasy/simple-web
+                  ports: 
+                    - containerPort: 80

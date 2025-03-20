@@ -1,0 +1,11 @@
+(define (domain template)
+    (:requirements :adl)
+    (:predicates    )
+    (:types )
+    (:constants)
+    (:action name
+        :parameters ()
+        :precondition ()
+        :effect (and)
+    )
+)

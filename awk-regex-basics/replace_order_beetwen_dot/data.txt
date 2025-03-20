@@ -1,0 +1,4 @@
+A.Kowalski           i M.Nowak
+
+Plik    z     danymi to t.in.
+Istotna jest liczba K. C jest licznikiem.

@@ -1,0 +1,21 @@
+voidmain(void)
+{
+	CalendarmyClendar;
+	RandomAccessFileraf=newRandomAccessFile("moj_plik_o_bardzo_dlugiej_nazwie.txt","RW"); /* cos */
+	if(RandomAccessFile.FileExists("moj_plik_o_bardzo_dlugiej_nazwie.txt")&&raf.length>0){
+		try
+		{
+			raf.writeBytes(STR_LINE_SEPARATOR+mcrmlc.STR_XML_HEADER);
+		}
+		catch(Exceptione)
+		{
+			printf("Wystapilyproblemypodczaszapisupliku:%s",moj_plik_o_bardzo_dlugiej_nazwie); 
+			exit(0); 
+		}
+		else
+		{
+			printf("Wystapilyproblemypodczasodczytupliku."); 
+			exit(0);
+		}
+	}
+}

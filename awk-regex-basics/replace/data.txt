@@ -1,0 +1,6 @@
+#replace count 12
+in in
+  #replace in 77 33 <-- "33" bedzie ignorowane
+main()
+{printf("%d",count+in);
+}
