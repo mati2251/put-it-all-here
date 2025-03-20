@@ -1,0 +1,18 @@
+[submodule "canny-edge-detetction"]
+	path = canny-edge-detetction
+	url = https://github.com/mati2251/canny-edge-detetction
+[submodule "smq"]
+	path = smq
+	url = https://github.com/mati2251/smq
+[submodule "watch-sleep-tracker"]
+	path = watch-sleep-tracker
+	url = https://github.com/mati2251/watch-sleep-tracker
+[submodule "ChessGamePlayer3D"]
+	path = ChessGamePlayer3D
+	url = https://github.com/mati2251/ChessGamePlayer3D
+[submodule "travelling-salesman-problem"]
+	path = travelling-salesman-problem
+	url = https://github.com/mati2251/travelling-salesman-problem
+[submodule "tea"]
+	path = tea
+	url = https://github.com/tea-io/tea
